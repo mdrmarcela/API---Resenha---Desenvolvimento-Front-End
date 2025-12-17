@@ -1,30 +1,50 @@
-// src/pages/usuarios/UsuariosLogin.jsx
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import Navbar from "../../components/shared/Navbar";
-import UsuariosFormLogin from "../../components/usuarios/UsuarioFormLogin";
-import { Navigate } from 'react-router-dom';
+import UsuariosFormLogin from "../../components/UsuariosFormLogin"; // ajuste o caminho conforme sua pasta
 import { useAuth } from "../../auth/useAuth";
 
 const UsuariosLogin = () => {
-    const { user, authLoading } = useAuth();
+  const { user, authLoading } = useAuth();
 
-    // Enquanto ainda está carregando o estado de auth, não decide redirecionar
-    if (authLoading) {
-        return <p>Carregando usuário...</p>; // ou um spinner bonitinho
-    }
-
-    // Se tiver usuário logado, redireciona declarativamente
-    if (user) {
-        return <Navigate to="/" replace />;
-    }
-
+  if (authLoading) {
     return (
-        <div>
-            <Navbar />
-            <Link to="/" className="btn btn-primary mx-2 mt-2">Voltar</Link>
-            <UsuariosFormLogin />
+      <div>
+        <Navbar />
+        <div className="container mt-4">
+          <div className="alert alert-info">Carregando usuário...</div>
         </div>
+      </div>
     );
+  }
+
+  // logado => vai pra área autenticada
+  if (user) {
+    return <Navigate to="/livros" replace />;
+  }
+
+  return (
+    <div>
+      <Navbar />
+      <div className="container mt-3" style={{ maxWidth: 720 }}>
+        <div className="d-flex justify-content-between align-items-center">
+          <Link to="/" className="btn btn-outline-secondary">
+            Voltar
+          </Link>
+
+          <Link to="/usuarios/register" className="btn btn-primary">
+            Criar conta
+          </Link>
+        </div>
+
+        <div className="card mt-3">
+          <div className="card-body">
+            <h3 className="mb-3">Entrar</h3>
+            <UsuariosFormLogin />
+          </div>
+        </div>
+      </div>
+    </div>
+  );
 };
 
 export default UsuariosLogin;

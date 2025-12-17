@@ -1,30 +1,50 @@
-// src/pages/usuarios/UsuariosRegister.jsx
-import { Link } from 'react-router-dom'
-import Navbar from "../../components/shared/Navbar"
-import UsuariosFormRegister from '../../components/usuarios/UsuarioFormRegister'
-import { Navigate } from 'react-router-dom';
-import { useAuth } from '../../auth/useAuth';
+import { Link, Navigate } from "react-router-dom";
+import Navbar from "../../components/shared/Navbar";
+import UsuariosFormRegister from "../../components/UsuariosFormRegister"; // ajuste o caminho conforme sua pasta
+import { useAuth } from "../../auth/useAuth";
 
 const UsuariosRegister = () => {
-    const { user, authLoading } = useAuth();
+  const { user, authLoading } = useAuth();
 
-    // Enquanto ainda está carregando o estado de auth, não decide redirecionar
-    if (authLoading) {
-        return <p>Carregando usuário...</p>; // ou um spinner bonitinho
-    }
-
-    // Se tiver usuário logado, redireciona declarativamente
-    if (user) {
-        return <Navigate to="/" replace />;
-    }
-
+  if (authLoading) {
     return (
-        <div>
-            <Navbar />
-            <Link to="/" className="btn btn-primary mx-2 mt-2">Voltar</Link>
-            <UsuariosFormRegister />
+      <div>
+        <Navbar />
+        <div className="container mt-4">
+          <div className="alert alert-info">Carregando usuário...</div>
         </div>
-    )
-}
+      </div>
+    );
+  }
 
-export default UsuariosRegister
+  // logado => área autenticada
+  if (user) {
+    return <Navigate to="/livros" replace />;
+  }
+
+  return (
+    <div>
+      <Navbar />
+      <div className="container mt-3" style={{ maxWidth: 720 }}>
+        <div className="d-flex justify-content-between align-items-center">
+          <Link to="/" className="btn btn-outline-secondary">
+            Voltar
+          </Link>
+
+          <Link to="/usuarios/login" className="btn btn-primary">
+            Já tenho conta
+          </Link>
+        </div>
+
+        <div className="card mt-3">
+          <div className="card-body">
+            <h3 className="mb-3">Criar conta</h3>
+            <UsuariosFormRegister />
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default UsuariosRegister;
