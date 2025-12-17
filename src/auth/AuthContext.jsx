@@ -2,15 +2,14 @@
 import { createContext, useEffect, useMemo, useState } from "react";
 import { jwtDecode } from "jwt-decode";
 
-// Aceita qualquer um dos nomes, pra não quebrar seu .env atual:
 const API_BASE_URL =
   import.meta.env.VITE_API_URL ||
   import.meta.env.VITE_API_BASE_URL ||
   "http://localhost:3000";
 
-// Troque pra localStorage se quiser manter logado ao fechar o navegador
-const TOKEN_STORE = sessionStorage; // ou localStorage
-const TOKEN_KEY = "at"; // mantendo o mesmo nome que você já usa
+const STORE = sessionStorage;       // ou localStorage
+const TOKEN_KEY = "at";
+const USER_KEY = "user";
 
 const AuthContext = createContext({
   user: null,
@@ -23,43 +22,49 @@ const AuthContext = createContext({
 });
 
 const AuthProvider = ({ children }) => {
-  const [token, setToken] = useState(() => TOKEN_STORE.getItem(TOKEN_KEY));
-  const [user, setUser] = useState(null);
+  const [token, setToken] = useState(() => STORE.getItem(TOKEN_KEY));
+  const [user, setUser] = useState(() => {
+    const raw = STORE.getItem(USER_KEY);
+    return raw ? JSON.parse(raw) : null;
+  });
   const [authLoading, setAuthLoading] = useState(true);
 
   const isAuth = useMemo(() => !!token, [token]);
 
-  function saveToken(t) {
-    if (t) TOKEN_STORE.setItem(TOKEN_KEY, t);
-    else TOKEN_STORE.removeItem(TOKEN_KEY);
+  function persistAuth({ token: t, user: u }) {
+    if (t) STORE.setItem(TOKEN_KEY, t);
+    else STORE.removeItem(TOKEN_KEY);
+
+    if (u) STORE.setItem(USER_KEY, JSON.stringify(u));
+    else STORE.removeItem(USER_KEY);
+
     setToken(t || null);
+    setUser(u || null);
   }
 
   function logout() {
-    saveToken(null);
-    setUser(null);
+    persistAuth({ token: null, user: null });
   }
 
-  // Boot: tenta reaproveitar token salvo e validar expiração
+  // Boot: valida expiração do token e mantém user do storage
   useEffect(() => {
     try {
-      const stored = TOKEN_STORE.getItem(TOKEN_KEY);
-      if (!stored) {
-        setUser(null);
+      const storedToken = STORE.getItem(TOKEN_KEY);
+      if (!storedToken) {
+        logout();
         return;
       }
 
-      const decoded = jwtDecode(stored);
-
-      // Se tiver exp e estiver expirado, desloga
+      const decoded = jwtDecode(storedToken);
       if (decoded?.exp && decoded.exp * 1000 <= Date.now()) {
         logout();
         return;
       }
 
-      // Seu JWT tem: { id, email, nome }
-      setUser({ id: decoded.id, email: decoded.email, nome: decoded.nome });
-      setToken(stored);
+      // token ok: mantém token e user (se existir) do storage
+      setToken(storedToken);
+      const rawUser = STORE.getItem(USER_KEY);
+      setUser(rawUser ? JSON.parse(rawUser) : { id: decoded.id, nome: decoded.nome, email: decoded.email });
     } catch {
       logout();
     } finally {
@@ -76,14 +81,10 @@ const AuthProvider = ({ children }) => {
     });
 
     const data = await res.json().catch(() => ({}));
+    if (!res.ok) throw new Error(data?.erro || "Erro ao realizar login");
 
-    if (!res.ok) {
-      throw new Error(data?.erro || "Erro ao realizar login");
-    }
-
-    // seu back retorna { usuario, token }
-    saveToken(data.token);
-    setUser(data.usuario);
+    // { usuario, token }
+    persistAuth({ token: data.token, user: data.usuario });
   }
 
   async function register({ nome, email, senha }) {
@@ -94,19 +95,13 @@ const AuthProvider = ({ children }) => {
     });
 
     const data = await res.json().catch(() => ({}));
+    if (!res.ok) throw new Error(data?.erro || "Erro ao cadastrar");
 
-    if (!res.ok) {
-      throw new Error(data?.erro || "Erro ao cadastrar");
-    }
-
-    // Fluxo mínimo do enunciado: registrar → autenticar
-    await login(email, senha);
+    await login(email, senha); // registrar → autenticar
   }
 
   return (
-    <AuthContext.Provider
-      value={{ user, setUser, token, isAuth, authLoading, login, register, logout }}
-    >
+    <AuthContext.Provider value={{ user, setUser, token, isAuth, authLoading, login, register, logout }}>
       {children}
     </AuthContext.Provider>
   );

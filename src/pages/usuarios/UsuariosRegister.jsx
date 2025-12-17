@@ -1,6 +1,6 @@
 import { Link, Navigate } from "react-router-dom";
 import Navbar from "../../components/shared/Navbar";
-import UsuariosFormRegister from "../../components/UsuariosFormRegister"; // ajuste o caminho conforme sua pasta
+import UsuariosFormRegister from "../../components/usuarios/UsuariosFormRegister"; // ajuste o caminho conforme sua pasta
 import { useAuth } from "../../auth/useAuth";
 
 const UsuariosRegister = () => {
