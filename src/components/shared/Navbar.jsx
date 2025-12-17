@@ -1,10 +1,9 @@
 import { Link, NavLink, useNavigate } from "react-router-dom";
-import { useContext } from "react";
 import ThemeButton from "./ThemeButton";
-import { AuthContext } from "../auth/AuthContext";
+import { useAuth } from "../../auth/useAuth";
 
 export default function Navbar() {
-  const { user, logout } = useContext(AuthContext);
+  const { user, logout } = useAuth();
   const navigate = useNavigate();
 
   function sair() {
@@ -13,14 +12,12 @@ export default function Navbar() {
   }
 
   return (
-    <nav className="navbar navbar-expand-lg navbar-light bg-body-tertiary">
+    <nav className="navbar navbar-expand-lg bg-body-tertiary">
       <div className="container-fluid">
-        {/* Brand */}
         <Link className="navbar-brand" to="/">
           Resenhas
         </Link>
 
-        {/* Direita (fora do collapse) */}
         <div className="d-flex align-items-center ms-auto order-lg-3">
           <ThemeButton />
 
@@ -60,9 +57,7 @@ export default function Navbar() {
                     Usuários
                   </NavLink>
                 </li>
-                <li>
-                  <hr className="dropdown-divider" />
-                </li>
+                <li><hr className="dropdown-divider" /></li>
                 <li>
                   <button className="dropdown-item" onClick={sair}>
                     Sair
@@ -72,7 +67,6 @@ export default function Navbar() {
             </div>
           )}
 
-          {/* Botão do collapse */}
           <button
             className="navbar-toggler ms-2"
             type="button"
@@ -86,44 +80,26 @@ export default function Navbar() {
           </button>
         </div>
 
-        {/* Links (collapse) */}
         <div className="collapse navbar-collapse order-lg-2" id="navbarSupportedContent">
           <ul className="navbar-nav me-auto mb-2 mb-lg-0">
             {user && (
               <li className="nav-item dropdown">
-                <Link
-                  className="nav-link dropdown-toggle"
-                  role="button"
-                  data-bs-toggle="dropdown"
-                  aria-expanded="false"
-                >
+                <Link className="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                   Livros
                 </Link>
                 <ul className="dropdown-menu">
-                  <li>
-                    <Link className="dropdown-item" to="/livros">
-                      Lista de Livros
-                    </Link>
-                  </li>
-                  <li>
-                    <Link className="dropdown-item" to="/livros/create">
-                      Criar Livro
-                    </Link>
-                  </li>
+                  <li><Link className="dropdown-item" to="/livros">Lista de Livros</Link></li>
+                  <li><Link className="dropdown-item" to="/livros/create">Criar Livro</Link></li>
                 </ul>
               </li>
             )}
 
             <li className="nav-item">
-              <NavLink to="/sobre" className="nav-link">
-                Sobre
-              </NavLink>
+              <NavLink to="/sobre" className="nav-link">Sobre</NavLink>
             </li>
 
             <li className="nav-item">
-              <NavLink to="/contato" className="nav-link">
-                Contato
-              </NavLink>
+              <NavLink to="/contato" className="nav-link">Contato</NavLink>
             </li>
           </ul>
         </div>
