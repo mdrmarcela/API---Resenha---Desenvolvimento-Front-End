@@ -1,66 +1,53 @@
-# API de Resenha – Desenvolvimento Front-End
+# API + SPA de Resenha – Desenvolvimento Front-End
 
-API RESTful desenvolvida em **Node.js + Express** para gerenciar usuários, livros e resenhas. jurídicos.  
-A API utiliza **JWT** para autenticação e **bcrypt** para armazenar as senhas de forma segura(hash).  
-Na persistência de dados é usado o ORM **Sequelize** com banco de dados **MySQL**.
-A validação de dados é feita com Ajv. 
+Esse projeto é uma aplicação web desenvolvida para gerenciar usuários, livros e resenhas, com autenticação de usuários via **JWT**. 
+O front-End (React + Vite) consome uma API REST (Node.js + Express) separada, seguindo a arquitetura **(SPA+API)**
 
-Este projeto faz parte da disciplina de **Desenvolvimento Back-End** e pode ser usado como base para estudo de:
-- CRUD com Node.js + Express;
-- Autenticação com JWT;
-- Modelagem relacional simples (1:N);
-- Rotas aninhadas.
+A aplicação implementa um fluxo mínimo: **registrar -> autenticar -> acessar área autenticada -> encerrar sessão**, além de um CRUD completo para usuários e para dois recursos do sistema **(Livros e Resenhas)**
 
 ---
 
-## Compatibilidade
+## Arquiterua
 
-- Node.js;
-- Express;
-- MySQL;
-- Sequelize;
-- bcrypt;
-- json web token;
-- Ajv;
-- Cors;
-- Swagger-ui-express.
+- **Front-End:** React + Vite: Interface, rotas, formulários, validações de UX e consumo da API.
+- **Back-End:** Regras, autenticação JWT, validação de dados com AJV e persistência no banco. 
 
 ---
 
-## Modelagem de Dados
+## Diagrama
 
-O banco de dados MySQL  possui **3 tabelas** principais:
+```text
+[React (SPA)] --> [API Node/Express] --> [MySQL]
+```
 
-### 1. `usuario`
-Armazena quem pode acessar o sistema.
+---
 
-- `id` (INT, PK, AUTO_INCREMENT)  
-- `nome` (VARCHAR)  
-- `email` (VARCHAR, UNIQUE)  
-- `senha` (VARCHAR) – **hash da senha com bcrypt**, nunca texto plano.
+## Funcionalidades
 
-### 2. `livro`
-Armazena os livros cadastrados.
+-**Autenticação:**
+    Cadastro de usuário;
+    Login (retorna o JWT);
+    Rotas protegidas;
+    Logout (remove token e usuário da sessão no front-end)
 
-- `id` (INT, PK, AUTO_INCREMENT)  
-- `titulo` (VARCHAR)  
-- `autor` (VARCHAR, UNIQUE) 
-- `genero` (VARCHAR) – opcional
-- `isbn` (VARCHAR, UNIQUE)
+-**Usuários (CRUD):**
+    Listar usuários;
+    Cadastrar usuários;
+    Editar usuário;
+    Excluir usuário.
 
-### 3. `resenha`
-Armazena as resenhas relacionadas aos livros.
+-**Livros (CRUD):** 
+    Listar;
+    Detalhar;
+    Criar;
+    Editar;
+    Excluir.
 
-- `id` (INT, PK, AUTO_INCREMENT)  
-- `titulo` (VARCHAR)
-- `conteudo` (TEXT)  
-- `nota` (INT) – 1-5 
-- `livro_id` (INT, FK → `livro.id`)  
-- `usuario_id` (INT, FK → `usuario.id`)  
-
-**Relacionamento:**  
-- Um **livro** pode ter **várias resenhas** (1:N);
-- Um **usuário** pode ter **várias resenhas** (1:N).
+--**Resenhas (CRUD):** 
+    Listar;
+    Criar.
+    Editar;
+    Excluir. 
 
 ---
 
@@ -81,22 +68,11 @@ config.js         # configurações globais (BD e JWT)
 package.json      # metadados e dependências do projeto
 ```
 
-## Configuração do Banco de Dados
-
-Crie um banco de dados MySQL, por exemplo: resenhas_db
-(pode ser pelo phpMyAdmin ou outro cliente).
-
-No XAMPP, inicie o MySQL e o Apache. 
-
----
-
-## Diagrama do Banco de Dados
-![Diagrama do banco](./modelagem/Modelagem.png)
-
 ---
 
 ## Instalação e Execução
 
+-**BACK-END:**
 Clonar ou baixar este repositório.
 
 Dentro da pasta do projeto, instalar as dependências:
@@ -118,6 +94,25 @@ npx nodemon
 A API ficará disponível em (por padrão):
 http://localhost:3000
 
+-**FRONT-END:**
+Clonar ou baixar este repositório.
+
+Dentro da pasta do projeto, instalar as dependências:
+
+```text
+npm install
+```
+
+Iniciar a aplicação em modo desenvolvimento:
+
+```text
+npm run dev
+```
+
+O Front-End ficará disponível em:
+http://localhost:5173
+
+
 ---
 
 ## Autenticação e Fluxo de Uso
@@ -125,51 +120,36 @@ http://localhost:3000
 A API utiliza JWT (JSON Web Token) para proteger as rotas.
 Fluxo básico:
 
-Cadastro de usuário
+1. Cadastro de usuário;
 
-Login para obter um token JWT
+2. Login para obter um token JWT;
 
-Uso das rotas protegidas enviando o token no cabeçalho Authorization.
+3. Acessar a área autentica:
+    Criar livro;
+    Listar livro;
+    Ver detalhes do livro;
+    Criar/editar/excluir resenha;
 
-1. Cadastro de Usuário
-
-Endpoint: POST /usuarios
-Body (JSON):
-
-{
-  "nome": "Marcela",
-  "email": "marcela@teste.com",
-  "senha": "123456"
-}
-
-A senha é automaticamente convertida em hash com bcrypt antes de ser salva.
-
-O email é único.
-
-2. Login
-Endpoint: POST /usuarios/login
-Body (JSON):
-
-{
-  "email": "marcela@teste.com",
-  "senha": "123456"
-}
+4. Logout.
 
 ---
 
 ## Rotas principais
 
 ### Usuários
-- `POST /usuarios` – cadastro de usuário (público)
-- `POST /usuarios/login` – login e geração de JWT (público)
-- `GET /usuarios` – lista usuários (rota protegida)
+- `POST /usuarios` – cadastro de usuário 
+- `POST /usuarios/login` – login e geração de JWT 
+- `GET /usuarios` – lista usuários 
+- `PUT /usuario/:id` – atualizar usuário
+- `DELETE /usuario/:id` – remover usuário
+
 
 ### Livros (Recurso A)
 - `GET /livros` – lista todos
-- `GET /livros/:id` – busca por id
-- `POST /livros` – criar (protegida)
-- `PUT /livros/:id` – atualizar (protegida)
-- `DELETE /livros/:id` – remover  (protegida)
+- `GET /livros/:id` – detalhes
+- `POST /livros` – criar 
+- `PUT /livros/:id` – atualizar 
+- `DELETE /livros/:id` – remover  
 
 ### Resenhas (Recurso B aninhado)
 - `GET /resenha` – lista resenhas do livro
@@ -178,37 +158,9 @@ Body (JSON):
 - `PUT /resenha/:id` – atualizar resenha 
 - `DELETE /resenha/:id` – remover resenha 
 
-- Nas rotas aninhadas, o livro_id vem pela URL. 
-
 ---
 
 ### Validação
 Os dados de entrada são validados no servidor com Ajv, evitando envio de campos extras e garantindo tipos e obrigatoriedades conforme os schemas definidos. 
 
 ---
-
-## Exemplo no Postman:
-
-Aba Authorization
-
-Type: Bearer Token
-
-Token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
-
-O middleware em app/middlewares/tokenValido.js é responsável por:
-
-Ler o cabeçalho Authorization;
-
-Verificar se é um Bearer Token;
-
-Validar o JWT usando o segredo configurado em config.js;
-
-Bloquear a requisição caso o token seja inválido ou ausente.
-
----
-
-## Documentação da API (Swagger)
-
-A documentação interativa da API está disponível em:
-
-- `http://localhost:3000/docs`  
