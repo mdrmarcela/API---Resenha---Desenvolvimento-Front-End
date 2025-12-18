@@ -93,14 +93,6 @@ export default function Navbar() {
                 </ul>
               </li>
             )}
-
-            <li className="nav-item">
-              <NavLink to="/sobre" className="nav-link">Sobre</NavLink>
-            </li>
-
-            <li className="nav-item">
-              <NavLink to="/contato" className="nav-link">Contato</NavLink>
-            </li>
           </ul>
         </div>
       </div>

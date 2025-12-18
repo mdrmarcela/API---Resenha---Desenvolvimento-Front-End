@@ -1,62 +1,28 @@
-import { Link } from "react-router-dom";
-import Navbar from "../components/shared/Navbar";
+import { Link, Navigate } from "react-router-dom";
 import { useAuth } from "../auth/useAuth";
 
 const App = () => {
   const { user, authLoading } = useAuth();
 
-  if (authLoading) {
-    return (
-      <div>
-        <Navbar />
-        <div className="container mt-4">
-          <div className="alert alert-info">Carregando usuário...</div>
-        </div>
-      </div>
-    );
-  }
+  if (authLoading) return <p>Carregando...</p>;
+
+  // Se já estiver logada, vai direto pros livros
+  if (user) return <Navigate to="/livros" replace />;
 
   return (
-    <div>
-      <Navbar />
+    <div className="min-vh-100 d-flex align-items-center justify-content-center bg-light">
+      <div className="card shadow" style={{ width: 420, maxWidth: "90vw" }}>
+        <div className="card-body text-center p-4">
+          <h2 className="mb-2">Minha Biblioteca</h2>
+          <p className="text-muted mb-4">Entre ou cadastre-se para acessar seus livros e resenhas.</p>
 
-      <div className="container mt-3">
-        <div className="p-4 border rounded">
-          <h1 className="mb-2">Sistema de Resenhas</h1>
-          <p className="text-muted mb-0">
-            Front-end SPA consumindo a API de Livros e Resenhas (JWT).
-          </p>
+          <Link to="/usuarios/login" className="btn btn-primary w-100">
+            Entrar
+          </Link>
 
-          <div className="d-flex flex-wrap gap-2 mt-3">
-            {!user ? (
-              <>
-                <Link to="/usuarios/login" className="btn btn-primary">
-                  Entrar
-                </Link>
-                <Link to="/usuarios/register" className="btn btn-outline-primary">
-                  Criar conta
-                </Link>
-                <Link to="/sobre" className="btn btn-outline-secondary">
-                  Sobre
-                </Link>
-                <Link to="/contato" className="btn btn-outline-secondary">
-                  Contato
-                </Link>
-              </>
-            ) : (
-              <>
-                <div className="alert alert-success mb-0 flex-grow-1">
-                  Você está logada como <strong>{user.nome}</strong>.
-                </div>
-
-                <Link to="/livros" className="btn btn-success">
-                  Ir para Livros
-                </Link>
-                <Link to="/livros/create" className="btn btn-outline-success">
-                  Cadastrar Livro
-                </Link>
-              </>
-            )}
+          <div className="mt-3">
+            <span className="text-muted">Ainda não tem conta? </span>
+            <Link to="/usuarios/register">Cadastre-se</Link>
           </div>
         </div>
       </div>
