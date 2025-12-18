@@ -10,13 +10,12 @@ const Perfil = () => {
 
   const [nome, setNome] = useState("");
   const [email, setEmail] = useState("");
-  const [senha, setSenha] = useState(""); // opcional
+  const [senha, setSenha] = useState(""); 
 
   const [loading, setLoading] = useState(false);
   const [erro, setErro] = useState("");
   const [ok, setOk] = useState("");
 
-  // preencher form quando carregar user
   useEffect(() => {
     if (user) {
       setNome(user.nome || "");
@@ -37,7 +36,6 @@ const Perfil = () => {
       const body = {
         nome: nome.trim(),
         email: email.trim(),
-        // só manda senha se o usuário preencher
         ...(senha.trim() ? { senha: senha.trim() } : {}),
       };
 
@@ -49,9 +47,7 @@ const Perfil = () => {
       const data = await res.json().catch(() => ({}));
       if (!res.ok) throw new Error(data?.erro || "Erro ao atualizar usuário");
 
-      // atualiza o contexto (pra Navbar e Perfil refletirem o novo nome/email)
       setUser(data);
-      // opcional: limpar campo senha
       setSenha("");
 
       setOk("Perfil atualizado com sucesso!");

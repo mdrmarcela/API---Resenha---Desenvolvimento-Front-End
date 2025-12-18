@@ -6,7 +6,6 @@ const App = () => {
 
   if (authLoading) return <p>Carregando...</p>;
 
-  // Se já estiver logada, vai direto pros livros
   if (user) return <Navigate to="/livros" replace />;
 
   return (

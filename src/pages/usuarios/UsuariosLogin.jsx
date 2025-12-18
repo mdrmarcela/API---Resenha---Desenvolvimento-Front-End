@@ -1,6 +1,6 @@
 import { Link, Navigate } from "react-router-dom";
 import Navbar from "../../components/shared/Navbar";
-import UsuariosFormLogin from "../../components/usuarios/UsuariosFormLogin"; // ajuste o caminho conforme sua pasta
+import UsuariosFormLogin from "../../components/usuarios/UsuariosFormLogin"; 
 import { useAuth } from "../../auth/useAuth";
 
 const UsuariosLogin = () => {
@@ -17,7 +17,6 @@ const UsuariosLogin = () => {
     );
   }
 
-  // logado => vai pra área autenticada
   if (user) {
     return <Navigate to="/livros" replace />;
   }

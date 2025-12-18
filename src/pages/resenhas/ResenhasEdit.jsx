@@ -29,7 +29,6 @@ const ResenhasEdit = () => {
       setErro(e.message);
       setLoading(false);
     });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [livro_id, id]);
 
   if (authLoading) return <p>Carregando usuário...</p>;

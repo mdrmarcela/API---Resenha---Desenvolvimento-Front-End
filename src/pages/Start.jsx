@@ -6,6 +6,5 @@ export default function Start() {
 
   if (authLoading) return <p>Carregando...</p>;
 
-  // logado -> livros | deslogado -> login
   return user ? <Navigate to="/livros" replace /> : <Navigate to="/usuarios/login" replace />;
 }

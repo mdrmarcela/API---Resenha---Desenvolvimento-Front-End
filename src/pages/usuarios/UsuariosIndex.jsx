@@ -30,7 +30,6 @@ const UsuariosIndex = () => {
 
   useEffect(() => {
     carregar();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   async function deletar(id) {

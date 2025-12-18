@@ -42,7 +42,6 @@ const LivrosShow = () => {
 
   useEffect(() => {
     carregar();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
   async function criarResenha(e) {
@@ -59,7 +58,7 @@ const LivrosShow = () => {
       titulo: form.titulo.trim(),
       conteudo: form.conteudo.trim(),
       nota: Number(form.nota),
-      usuario_id: user.id, // obrigatório no seu schema
+      usuario_id: user.id, 
     };
 
     try {
@@ -152,7 +151,7 @@ const LivrosShow = () => {
               ))}
 
               {resenhas.length === 0 && (
-                <div className="alert alert-secondary mt-3">Nenhuma resenha ainda. Seja a primeira 🙂</div>
+                <div className="alert alert-secondary mt-3">Nenhuma resenha ainda. </div>
               )}
             </div>
 

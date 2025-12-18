@@ -21,7 +21,6 @@ const UsuariosEdit = () => {
       setErro("");
       setLoading(true);
 
-      // como não existe GET /usuarios/:id, buscamos todos e pegamos o alvo
       const res = await authFetch("/usuarios", { signal: ac.signal });
       const data = await res.json().catch(() => ({}));
       if (!res.ok) throw new Error(data?.erro || "Erro ao carregar usuários");
@@ -39,7 +38,6 @@ const UsuariosEdit = () => {
     });
 
     return () => ac.abort();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
   if (authLoading) return <p>Carregando usuário...</p>;

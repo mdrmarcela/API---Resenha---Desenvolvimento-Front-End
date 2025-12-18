@@ -1,6 +1,6 @@
 import { Link, Navigate } from "react-router-dom";
 import Navbar from "../../components/shared/Navbar";
-import UsuariosFormRegister from "../../components/usuarios/UsuariosFormRegister"; // ajuste o caminho conforme sua pasta
+import UsuariosFormRegister from "../../components/usuarios/UsuariosFormRegister"; 
 import { useAuth } from "../../auth/useAuth";
 
 const UsuariosRegister = () => {
@@ -17,7 +17,6 @@ const UsuariosRegister = () => {
     );
   }
 
-  // logado => área autenticada
   if (user) {
     return <Navigate to="/livros" replace />;
   }
