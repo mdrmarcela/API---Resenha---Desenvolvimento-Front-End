@@ -1,11 +1,3 @@
-// src/components/UsuariosFormRegister.jsx
-//
-// REGISTRO (JWT Bearer, sem refresh)
-// - POST /usuarios (cria usuário)
-// - POST /usuarios/login (pega { usuario, token })
-// - Salva token em sessionStorage("at") e user em sessionStorage("user")
-// - Redireciona para /livros
-
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Toast from "../shared/Toast";
@@ -22,8 +14,6 @@ const UsuariosFormRegister = () => {
 
   const navigate = useNavigate();
 
-  // Mantém compatibilidade: se seu useAuth já tiver register/login, usamos.
-  // Se não tiver, usamos o fallback com fetch direto.
   const auth = useAuth?.() || {};
   const registerFn = auth.register;
   const loginFn = auth.login;
@@ -35,15 +25,12 @@ const UsuariosFormRegister = () => {
     setLoading(true);
 
     try {
-      // Se você já atualizou seu AuthContext/useAuth com register(), usa ele:
       if (typeof registerFn === "function") {
         await registerFn({ nome, email, senha });
         navigate("/livros");
         return;
       }
 
-      // Fallback (funciona mesmo que seu contexto ainda seja antigo):
-      // 1) cria usuário
       const resRegister = await fetch(`${API_BASE_URL}/usuarios`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -55,7 +42,6 @@ const UsuariosFormRegister = () => {
         throw new Error(dataRegister?.erro || "Falha no cadastro");
       }
 
-      // 2) autentica para obter token
       if (typeof loginFn === "function") {
         await loginFn(email, senha);
       } else {
@@ -70,14 +56,12 @@ const UsuariosFormRegister = () => {
           throw new Error(dataLogin?.erro || "Falha ao autenticar após cadastro");
         }
 
-        // { usuario, token }
         sessionStorage.setItem("at", dataLogin.token);
         sessionStorage.setItem("user", JSON.stringify(dataLogin.usuario));
 
         if (typeof setUser === "function") setUser(dataLogin.usuario);
       }
 
-      // limpa senha por segurança
       setSenha("");
       navigate("/livros");
     } catch (err) {

@@ -1,15 +1,13 @@
-// LoggedUser.jsx
 import { useAuthFetch } from "../../auth/useAuthFetch";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../auth/useAuth";
 
-// Pega a API_BASE_URL da variável de ambiente
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 const NavbarLoggedUser = () => {
     const navigate = useNavigate();
     const authFetch = useAuthFetch();
-    const { user, authLoading, setUser } = useAuth(); // agora vem do contexto
+    const { user, authLoading, setUser } = useAuth(); 
 
     const handleLogoutClick = async (e) => {
         e.preventDefault();
@@ -26,7 +24,6 @@ const NavbarLoggedUser = () => {
         }
     }
 
-    // Enquanto ainda está carregando o estado de auth, não decide redirecionar
     if (authLoading) {
         return null;
     }
@@ -51,7 +48,7 @@ const NavbarLoggedUser = () => {
                     </li>
                     <li>
                         <Link className="dropdown-item text-center" type="button" to="/usuarios/register">
-                            Registrar
+                            Cadastrar
                         </Link>
                     </li>
                 </ul>

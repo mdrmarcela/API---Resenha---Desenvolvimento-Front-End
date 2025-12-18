@@ -11,7 +11,7 @@ const LivrosList = () => {
   const [error, setError] = useState("");
 
   const [q, setQ] = useState("");
-  const [sort, setSort] = useState("titulo_asc"); // titulo_asc | titulo_desc | autor_asc | autor_desc | id_desc | id_asc
+  const [sort, setSort] = useState("titulo_asc"); 
   const [busyId, setBusyId] = useState(null);
 
   async function carregar() {
@@ -31,11 +31,10 @@ const LivrosList = () => {
 
   useEffect(() => {
     carregar();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   async function deletar(id) {
-    if (!confirm("Excluir este livro? Isso também remove as resenhas vinculadas (se o back estiver configurado assim).")) {
+    if (!confirm("Tem certeza que deseja excluir esse livro?")) {
       return;
     }
 
@@ -44,7 +43,6 @@ const LivrosList = () => {
 
     try {
       const res = await authFetch(`/livros/${id}`, { method: "DELETE" });
-      // seu back pode retornar 204 sem body
       if (!res.ok && res.status !== 204) {
         const data = await res.json().catch(() => ({}));
         throw new Error(data?.erro || "Erro ao excluir livro");

@@ -13,7 +13,6 @@ const useAuthFetch = () => {
     async (url, fetchOptions = {}) => {
       const { headers: originalHeaders, body, ...restOptions } = fetchOptions;
 
-      // Se for "/livros/1", vira "http://localhost:3000/livros/1"
       const finalUrl =
         typeof url === "string" && url.startsWith("http")
           ? url
@@ -21,11 +20,9 @@ const useAuthFetch = () => {
 
       const headers = new Headers(originalHeaders || {});
 
-      // Bearer token
       const accessToken = sessionStorage.getItem("at");
       if (accessToken) headers.set("Authorization", `Bearer ${accessToken}`);
 
-      // Se o body é string (JSON.stringify), define Content-Type automaticamente (se não veio)
       if (typeof body === "string" && !headers.has("Content-Type")) {
         headers.set("Content-Type", "application/json");
       }

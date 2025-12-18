@@ -1,4 +1,3 @@
-// src/auth/useAuth.js
 import { useContext } from "react";
 import { AuthContext } from "./AuthContext";
 
@@ -7,7 +6,6 @@ const useAuth = () => {
   if (!context) {
     throw new Error("useAuth deve ser usado dentro de um AuthProvider");
   }
-  // agora: { user, token, authLoading, login, register, logout }
   return context;
 };
 

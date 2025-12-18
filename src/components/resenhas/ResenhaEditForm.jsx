@@ -27,7 +27,7 @@ const ResenhaEditForm = ({ resenha }) => {
         titulo: titulo.trim(),
         conteudo: conteudo.trim(),
         nota: Number(nota),
-        usuario_id: user?.id, // obrigatório no schema
+        usuario_id: user?.id, 
       };
 
       const res = await authFetch(`/livros/${livro_id}/resenhas/${id}`, {

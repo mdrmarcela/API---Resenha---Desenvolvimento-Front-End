@@ -37,7 +37,6 @@ const LivrosEdit = () => {
       setErro(e.message);
       setLoading(false);
     });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
   function buildBody() {

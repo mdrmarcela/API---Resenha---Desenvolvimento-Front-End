@@ -1,4 +1,3 @@
-// src/auth/AuthContext.jsx
 import { createContext, useEffect, useMemo, useState } from "react";
 import { jwtDecode } from "jwt-decode";
 
@@ -7,7 +6,7 @@ const API_BASE_URL =
   import.meta.env.VITE_API_BASE_URL ||
   "http://localhost:3000";
 
-const STORE = sessionStorage;       // ou localStorage
+const STORE = sessionStorage;     
 const TOKEN_KEY = "at";
 const USER_KEY = "user";
 
@@ -48,7 +47,6 @@ const AuthProvider = ({ children }) => {
     setUser(null);
 }
 
-  // Boot: valida expiração do token e mantém user do storage
   useEffect(() => {
     try {
       const storedToken = STORE.getItem(TOKEN_KEY);
@@ -63,7 +61,6 @@ const AuthProvider = ({ children }) => {
         return;
       }
 
-      // token ok: mantém token e user (se existir) do storage
       setToken(storedToken);
       const rawUser = STORE.getItem(USER_KEY);
       setUser(rawUser ? JSON.parse(rawUser) : { id: decoded.id, nome: decoded.nome, email: decoded.email });
@@ -72,7 +69,6 @@ const AuthProvider = ({ children }) => {
     } finally {
       setAuthLoading(false);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   async function login(email, senha) {
@@ -85,7 +81,6 @@ const AuthProvider = ({ children }) => {
     const data = await res.json().catch(() => ({}));
     if (!res.ok) throw new Error(data?.erro || "Erro ao realizar login");
 
-    // { usuario, token }
     persistAuth({ token: data.token, user: data.usuario });
   }
 
@@ -99,7 +94,7 @@ const AuthProvider = ({ children }) => {
     const data = await res.json().catch(() => ({}));
     if (!res.ok) throw new Error(data?.erro || "Erro ao cadastrar");
 
-    await login(email, senha); // registrar → autenticar
+    await login(email, senha); // registrar -> autenticar
   }
 
   return (

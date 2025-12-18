@@ -13,7 +13,7 @@ const UsuarioEditForm = ({ usuario }) => {
 
   const [nome, setNome] = useState(usuario?.nome || "");
   const [email, setEmail] = useState(usuario?.email || "");
-  const [senha, setSenha] = useState(""); // opcional (só envia se preencher)
+  const [senha, setSenha] = useState(""); 
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -29,7 +29,6 @@ const UsuarioEditForm = ({ usuario }) => {
         email: email.trim(),
       };
 
-      // só manda senha se usuário digitou (evita trocar pra vazio)
       const s = senha.trim();
       if (s) body.senha = s;
 
@@ -41,9 +40,7 @@ const UsuarioEditForm = ({ usuario }) => {
       const data = await res.json().catch(() => ({}));
       if (!res.ok) throw new Error(data?.erro || "Erro ao atualizar usuário");
 
-      // se o usuário editado for o mesmo que está logado, atualiza o contexto
       if (currentUser?.id && Number(currentUser.id) === Number(id)) {
-        // se o back retornar o usuário atualizado, usa; se não, usa o body
         const atualizado = data?.usuario || data || { ...currentUser, ...body };
         setUser(atualizado);
       }

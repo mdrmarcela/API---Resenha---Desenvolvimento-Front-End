@@ -1,16 +1,7 @@
-// src/components/UsuariosFormLogin.jsx
-//
-// LOGIN (JWT Bearer, sem refresh)
-// - Envia email/senha para POST /usuarios/login
-// - Back retorna { usuario, token }
-// - Salvamos token em sessionStorage("at") e user em sessionStorage("user")
-// - Redireciona para /livros (área autenticada)
-
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Toast from "../shared/Toast";
 import { useAuth } from "../../auth/useAuth";
-
 
 const UsuariosFormLogin = () => {
   const [email, setEmail] = useState("");
@@ -27,7 +18,7 @@ const UsuariosFormLogin = () => {
     setLoading(true);
 
     try {
-      await login(email, senha); // usa o AuthContext (chama /usuarios/login)
+      await login(email, senha); 
       setSenha("");
       navigate("/livros");
     } catch (err) {
