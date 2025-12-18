@@ -7,7 +7,7 @@ A aplicação implementa um fluxo mínimo: **registrar -> autenticar -> acessar 
 
 ---
 
-## Arquiterua
+## Arquitetura
 
 - **Front-End:** React + Vite: Interface, rotas, formulários, validações de UX e consumo da API.
 - **Back-End:** Regras, autenticação JWT, validação de dados com AJV e persistência no banco. 
@@ -56,16 +56,40 @@ A aplicação implementa um fluxo mínimo: **registrar -> autenticar -> acessar 
 Estrutura principal de pastas/arquivos:
 
 ```text
-/app
-  /commons        # helpers e utilitários
-  /controllers    # lógica de cada recurso (Usuario, Livro, Resenha)
-  /middlewares    # middlewares, ex.: validação de token JWT
-  /models         # models Sequelize e conexão com o banco
-  /routes         # definição das rotas da API
-/modelagem        # arquivos de modelagem/diagrama do banco 
-app.js            # ponto de entrada da aplicação (Express)
-config.js         # configurações globais (BD e JWT)
-package.json      # metadados e dependências do projeto
+public/            
+
+src/
+    auth/           
+        AuthContext.jsx
+        useAuth.js
+        useAuthFetch.jsx
+
+    components/  
+        livros/    
+        resenhas/ 
+        shared/
+        usuarios/
+
+    pages/
+        livros/
+        resenhas/
+        usuarios/
+    
+    App.jsx
+    Layout.jsx
+    Perfil.jsx
+    Start.jsx
+
+    routes/
+
+    main.jsx
+
+.env.example
+eslint.config.js
+index.css
+package.json      
+README.md
+vite.config.js
 ```
 
 ---
@@ -73,7 +97,7 @@ package.json      # metadados e dependências do projeto
 ## Instalação e Execução
 
 -**BACK-END:**
-Clonar ou baixar este repositório.
+Clonar ou baixar o repositório. (https://github.com/mdrmarcela/API---Resenha---Desenvolvimento-Back-End)
 
 Dentro da pasta do projeto, instalar as dependências:
 
