@@ -1,9 +1,9 @@
 {
-    "name": "react-frontend-chamados-2025",
-    "homepage": "https://seu-usuario.github.io/react-frontend-chamados-2025/",
+    "name": "API-Resenhas-Desenvolvimento Front-End",
+    "homepage": "https://github.com/mdrmarcela/API---Resenha---Desenvolvimento-Front-End",
     "private": false,
     "version": "1.0.0",
-    "description": "AtendeAí - Organize a fila de atendimento em aulas práticas",
+    "description": "Minha biblioteca de resenhas de livros.",
     "type": "module",
     "scripts": {
         "dev": "vite",
@@ -13,7 +13,7 @@
         "predeploy": "npm run build",
         "deploy": "gh-pages -d dist"
     },
-    "author": "Leonardo Bravo Estácio",
+    "author": "Marcela Matos Dutra Rodrigues",
     "license": "MIT",
     "dependencies": {
         "bootstrap": "^5.3.8",
