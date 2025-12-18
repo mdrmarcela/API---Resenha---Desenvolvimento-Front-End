@@ -43,8 +43,10 @@ const AuthProvider = ({ children }) => {
   }
 
   function logout() {
-    persistAuth({ token: null, user: null });
-  }
+    sessionStorage.removeItem("at");
+    setToken(null);
+    setUser(null);
+}
 
   // Boot: valida expiração do token e mantém user do storage
   useEffect(() => {

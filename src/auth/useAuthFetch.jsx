@@ -1,33 +1,43 @@
-// src/auth/useAuthFetch.jsx
 import { useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:3000";
+const API_BASE_URL =
+  import.meta.env.VITE_API_BASE_URL ||
+  import.meta.env.VITE_API_URL ||
+  "http://localhost:3000";
 
 const useAuthFetch = () => {
   const navigate = useNavigate();
 
   const authFetch = useCallback(
-    async (path, fetchOptions = {}) => {
-      // aceita "/livros" e também URL completa
-      const url = path.startsWith("http") ? path : `${API_BASE_URL}${path}`;
+    async (url, fetchOptions = {}) => {
+      const { headers: originalHeaders, body, ...restOptions } = fetchOptions;
 
-      const { headers: originalHeaders, ...restOptions } = fetchOptions;
+      // Se for "/livros/1", vira "http://localhost:3000/livros/1"
+      const finalUrl =
+        typeof url === "string" && url.startsWith("http")
+          ? url
+          : `${API_BASE_URL}${url}`;
 
       const headers = new Headers(originalHeaders || {});
+
+      // Bearer token
       const accessToken = sessionStorage.getItem("at");
       if (accessToken) headers.set("Authorization", `Bearer ${accessToken}`);
 
-      // se tiver body e não tiver content-type, seta JSON
-      if (restOptions.body && !headers.get("Content-Type")) {
+      // Se o body é string (JSON.stringify), define Content-Type automaticamente (se não veio)
+      if (typeof body === "string" && !headers.has("Content-Type")) {
         headers.set("Content-Type", "application/json");
       }
 
-      const res = await fetch(url, { ...restOptions, headers });
+      const res = await fetch(finalUrl, {
+        ...restOptions,
+        headers,
+        body,
+      });
 
       if (res.status === 401) {
         sessionStorage.removeItem("at");
-        sessionStorage.removeItem("user");
         navigate("/usuarios/login", { replace: true });
       }
 

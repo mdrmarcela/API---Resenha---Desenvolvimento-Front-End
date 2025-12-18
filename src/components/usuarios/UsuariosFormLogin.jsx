@@ -6,10 +6,11 @@
 // - Salvamos token em sessionStorage("at") e user em sessionStorage("user")
 // - Redireciona para /livros (área autenticada)
 
-import { useState, useContext } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Toast from "../shared/Toast";
-import { AuthContext } from "../auth/AuthContext";
+import { useAuth } from "../../auth/useAuth";
+
 
 const UsuariosFormLogin = () => {
   const [email, setEmail] = useState("");
@@ -18,7 +19,7 @@ const UsuariosFormLogin = () => {
   const [error, setError] = useState("");
 
   const navigate = useNavigate();
-  const { login } = useContext(AuthContext);
+  const { login } = useAuth();
 
   const handleSubmit = async (e) => {
     e.preventDefault();

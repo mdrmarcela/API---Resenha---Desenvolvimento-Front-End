@@ -3,7 +3,7 @@ import Navbar from "../../components/shared/Navbar";
 import { Link, Navigate, useParams } from "react-router-dom";
 import { useAuth } from "../../auth/useAuth";
 import { useAuthFetch } from "../../auth/useAuthFetch";
-import UsuarioEditForm from "../../components/usuarios/UsuarioEditForm";
+import UsuarioEditForm from "../../components/usuarios/UsuariosEditForm";
 
 const UsuariosEdit = () => {
   const { id } = useParams();
